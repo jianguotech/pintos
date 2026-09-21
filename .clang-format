@@ -1,0 +1,107 @@
+# .clang-format
+# 语言: C++
+Language: Cpp
+# 基础样式: 遵循 LLVM 编码规范
+BasedOnStyle: LLVM
+# --- 缩进与格式化基础 ---
+# 缩进宽度
+IndentWidth: 4
+# Tab 宽度
+TabWidth: 4
+# 永远不要使用 Tab，全部使用空格
+UseTab: Never
+# 列宽限制。0 表示不限制，clang-format 不会主动为了长度而换行。
+# 注意：这并不意味着所有行都不会被换行，例如函数参数列表如果设置了换行策略，仍然会换行。
+ColumnLimit: 0
+# --- 指针与引用 ---
+# 指针和引用的对齐方式
+# Left:   int* p; (靠近类型)
+# Right:  int *p; (靠近变量名, LLVM 默认)
+# Middle: int * p;
+DerivePointerAlignment: false
+PointerAlignment: Right
+# --- 大括号 {} ---
+# 大括号换行风格
+# Stroustrup: 基于 K&R，else/catch/while 另起一行；函数/控制语句的 { 不换行
+BreakBeforeBraces: Stroustrup
+# 细化不同场景下的大括号规则
+BraceWrapping:
+  AfterFunction: false          # 函数定义的 { 不换行
+  AfterControlStatement: false  # if/for/while 的 { 不换行
+  AfterClass: true              # 类的 { 另起一行
+  AfterStruct: true             # 结构体的 { 另起一行
+  AfterUnion: true              # union 的 { 另起一行（与类/结构体一致）
+  BeforeElse: true              # else 另起一行
+  BeforeCatch: true             # catch 另起一行
+  BeforeWhile: true             # do {...} 后的 while 另起一行
+# 允许短的函数体放在同一行
+# None: 不允许 (void f() {} 会被展开)
+# Empty: 只允许空的函数体 (void f() {})
+# All: 允许 (void f() { return 0; })
+AllowShortFunctionsOnASingleLine: Empty
+# 不允许将 if/else 的简短语句放在同一行 (e.g. if (a) return;)
+# 推荐设置为 Never，避免 "goto fail" 这类潜在的 bug
+AllowShortIfStatementsOnASingleLine: Never
+# 不允许将循环的简短语句放在同一行
+AllowShortLoopsOnASingleLine: false
+# --- 函数与控制流 ---
+# 控制语句 (if, for, while...) 的括号前加空格
+# e.g. "if (condition)" 而不是 "if(condition)"
+SpaceBeforeParens: ControlStatements
+# 函数的参数列表如果需要换行，则每个参数都单独占一行
+# false: clang-format 会尝试在一行内塞入尽可能多的参数 (Bin Packing)
+# true:  只要有一个参数需要换行，所有参数都会被垂直对齐
+AlignAfterOpenBracket: Align
+BinPackParameters: false
+BinPackArguments: false
+# --- 类与结构体 ---
+# class/struct/union 的访问修饰符 (public, private, protected) 的缩进
+# -4 表示相对于当前缩进，向左移动 4 个空格
+AccessModifierOffset: -4
+# 构造函数初始化列表的换行风格
+# Auto: 自动决定
+# NextLine: 总是换到下一行
+# BinPack: 尽可能打包在同一行
+BreakConstructorInitializers: BeforeColon
+# --- 空格控制 ---
+# 在 C 风格的类型转换后添加空格: (int) a 而不是 (int)a
+SpaceAfterCStyleCast: true
+# 在赋值运算符 (=, +=, ...) 前后添加空格
+SpaceBeforeAssignmentOperators: true
+# 方括号内侧不加空格: array[i] 而不是 array[ i ]
+SpacesInSquareBrackets: false
+# 圆括号内侧不加空格: func(a, b) 而不是 func( a, b )
+SpacesInParentheses: false
+# --- 头文件管理 ---
+# 自动排序 #include
+# 这对于保持代码整洁和避免重复包含非常有帮助
+SortIncludes: true
+# 将 #include 分组
+# Regroup: 根据 IncludeCategories 的规则重新分组和排序
+IncludeBlocks: Regroup
+# #include 分类规则 (正则表达式)
+# 1. 匹配当前项目的头文件 (比如项目名为 MyProject)
+# 2. 匹配 C++ 标准库头文件 (<...>)
+# 3. 匹配 C 标准库头文件 (<c...>)
+# 4. 匹配其他库的头文件 ("...")
+# 5. 匹配所有其他头文件
+# 优先级越高的类别，排序越靠前
+IncludeCategories:
+  - Regex:           '^"(MyProject|src|include)/'
+    Priority:        1
+  - Regex:           '^<[a-zA-Z0-9_]+>$'
+    Priority:        2
+  - Regex:           '^<c[a-zA-Z0-9_]+>$'
+    Priority:        3
+  - Regex:           '^".*\\.h"'
+    Priority:        4
+  - Regex:           '.*'
+    Priority:        5
+# --- 注释 ---
+# 自动重排注释。
+# 注意：因为 ColumnLimit=0，这个选项对长注释的自动换行效果会减弱，
+# 但它仍然有助于整理注释内的格式。
+ReflowComments: true
+# 自动修复命名空间结尾的注释
+# e.g. namespace A { ... } // namespace A
+FixNamespaceComments: true

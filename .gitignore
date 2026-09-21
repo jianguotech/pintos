@@ -1,0 +1,18 @@
+# Build products and test output
+**/build/
+*.o
+*.a
+*.d
+*.bin
+*.dsk
+*.output
+*.result
+*.errors
+# Local files and reports
+.DS_Store
+*.docx
+*.pdf
+*.pptx
+*.zip
+*.tar.gz
+*.rar
